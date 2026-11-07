@@ -6,7 +6,7 @@ Returnly uses the Agent-Native Chat template, React Router, TypeScript, Tailwind
 
 ## Run locally
 
-Requires Node **22.22 or newer** and pnpm. `.npmrc` selects Node **22.23.4** for pnpm commands; the computer's separate `node` command can be older.
+Requires Node **22.22 or newer within the 22.x release line** and pnpm. `package.json` declares the supported Node version for hosting providers, including Vercel. `.nvmrc` records **22.23.4** for local version managers. Select that version before running pnpm; pnpm no longer downloads or selects Node automatically through `.npmrc`.
 
 ```powershell
 pnpm install

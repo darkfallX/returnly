@@ -1,4 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "pnpm migrate:production && pnpm build"
+  "framework": null,
+  "buildCommand": "pnpm migrate:production && NITRO_PRESET=vercel pnpm build"
 }

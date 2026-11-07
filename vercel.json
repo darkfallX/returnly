@@ -1,5 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "buildCommand": "pnpm migrate:production && NITRO_PRESET=vercel pnpm build"
+  "buildCommand": "pnpm migrate:production && NITRO_PRESET=vercel AGENT_NATIVE_VERCEL_CRON_SCHEDULE=\"0 9 * * *\" pnpm build"
 }

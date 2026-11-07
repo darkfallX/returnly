@@ -4,6 +4,19 @@
     "firstRun": "off"
   },
   "doctor": {
-    "failOnBuild": false
+    "failOnBuild": false,
+    "dbToolScopingDenylist": {
+      "merchant_policies": "Access follows the merchant through Returnly actions.",
+      "branches": "Access follows the merchant through Returnly actions.",
+      "inventory": "Access follows the branch and merchant through Returnly actions.",
+      "slots": "Access follows the branch and merchant through Returnly actions.",
+      "claim_evidence": "Claim actions check parent claim access and evidence disclosure.",
+      "triage_results": "Access follows the parent claim and merchant role.",
+      "claim_messages": "Access follows the parent claim.",
+      "resolution_offers": "Access follows the parent claim and offer action permissions.",
+      "reservations": "Access follows the parent claim and reservation action permissions.",
+      "return_passes": "Pass actions check the parent claim and enforce check-in permissions.",
+      "claim_events": "Access follows the parent claim."
+    }
   }
 }

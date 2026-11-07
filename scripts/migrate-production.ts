@@ -8,6 +8,11 @@ import {
 loadEnv();
 
 async function main(): Promise<void> {
+  if (!/^postgres(?:ql)?:\/\//i.test(process.env.DATABASE_URL ?? "")) {
+    throw new Error(
+      "Production migrations require a PostgreSQL DATABASE_URL. Configure it for this deployment environment before rebuilding.",
+    );
+  }
   await withMigrationRuntime(async () => {
     await runFrameworkReleaseMigrations(null);
     await runAppReleaseMigrations();

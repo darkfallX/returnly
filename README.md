@@ -64,7 +64,13 @@ The shorter combined request, “Accept the store's replacement offer and reserv
 
 `.env.example` lists `DATABASE_URL`, `BETTER_AUTH_SECRET`, `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` and `GOOGLE_GENERATIVE_AI_API_KEY`. Provider connections should use the app's scoped settings flow. A production deployment requires a stable `BETTER_AUTH_SECRET` and persistent PostgreSQL; a successful build alone does not verify deployment health.
 
-## Checks
+## Vercel database setup
+
+Connect a persistent PostgreSQL database and configure `DATABASE_URL` and a stable `BETTER_AUTH_SECRET` in Vercel's Production environment. Set `BETTER_AUTH_URL` to the deployed app's public URL. Redeploy after changing environment variables.
+
+`vercel.json` runs `pnpm migrate:production` before `pnpm build`. This initializes the framework and Returnly tables using Vercel's configured database connection. A failed migration stops the deployment. Preview deployments also need their own configured PostgreSQL database; local PGlite is not accepted by the production migration script. Do not point previews at the production database.
+
+## Validation commands
 
 ```powershell
 $env:DATABASE_URL = 'pglite:./.tmp/returnly-test-db'

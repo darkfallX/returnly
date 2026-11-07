@@ -1,0 +1,300 @@
+/*
+ * Returnly button kit.
+ * - .rl-btn-primary adapts Magic UI "Shimmer Button" (MIT, https://magicui.design)
+ * - .rl-btn-secondary adapts the Uiverse "fill sweep" pattern (MIT, https://uiverse.io)
+ * - .rl-pulse adapts Magic UI "Pulsating Button" (MIT)
+ * Re-implemented as plain CSS so the same look works on <button> and <a>.
+ */
+
+.rl-btn {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  max-width: 100%;
+  min-height: 44px;
+  line-height: 1.35;
+  text-align: center;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  transition:
+    transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.3s ease,
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+.rl-btn:active:not([disabled]) {
+  transform: translateY(1px) scale(0.985);
+}
+.rl-btn:focus-visible {
+  outline: 2px solid #18181b;
+  outline-offset: 3px;
+}
+.rl-btn[disabled],
+.rl-btn[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* sizes (right padding is tighter because the icon chip sits there) */
+.rl-btn-sm {
+  min-height: 44px;
+  padding: 6px 6px 6px 16px;
+  font-size: 13px;
+  --chip: 28px;
+}
+.rl-btn-md {
+  min-height: 46px;
+  padding: 6px 6px 6px 20px;
+  font-size: 14px;
+  --chip: 34px;
+}
+.rl-btn-lg {
+  min-height: 52px;
+  padding: 7px 7px 7px 24px;
+  font-size: 16px;
+  --chip: 42px;
+}
+.rl-btn-noicon.rl-btn-sm {
+  padding: 8px 16px;
+}
+.rl-btn-noicon.rl-btn-md {
+  padding: 10px 22px;
+}
+.rl-btn-noicon.rl-btn-lg {
+  padding: 12px 28px;
+}
+.rl-btn-block {
+  width: 100%;
+  justify-content: space-between;
+}
+.rl-btn-block.rl-btn-noicon {
+  justify-content: center;
+}
+
+.rl-btn-chip {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--chip);
+  height: var(--chip);
+  border-radius: 999px;
+  transition:
+    transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+.rl-btn-chip svg {
+  width: 45%;
+  height: 45%;
+}
+.rl-btn:hover:not([disabled]) .rl-btn-chip {
+  transform: translateX(2px);
+}
+
+/* ---------- primary: lime fill, dark ink ---------- */
+.rl-btn-primary {
+  color: #18181b;
+  background: var(--lime);
+  border: 1px solid transparent;
+  box-shadow: 0 1px 2px #090b090a;
+}
+.rl-btn-primary::before {
+  content: none;
+}
+.rl-btn-primary::after {
+  content: none;
+}
+.rl-btn-primary:hover:not([disabled]) {
+  background: var(--lime-deep);
+  box-shadow: 0 2px 5px #090b0912;
+}
+.rl-btn-primary .rl-btn-chip {
+  background: #ffffffb3;
+  color: #18181b;
+}
+
+.rl-btn-ink {
+  color: #fff;
+  background: #191d19;
+  border: 1px solid #191d19;
+}
+.rl-btn-ink:hover:not([disabled]) {
+  background: #323832;
+}
+.rl-btn-teal {
+  color: #fff;
+  background: #13745e;
+  border: 1px solid #13745e;
+}
+.rl-btn-teal:hover:not([disabled]) {
+  background: #105d4c;
+}
+
+/* ---------- secondary: white with ink fill sweep ---------- */
+.rl-btn-secondary {
+  color: #18181b;
+  background: #fff;
+  border: 1px solid #e4e4e7;
+}
+.rl-btn-secondary::before {
+  content: none;
+}
+.rl-btn-secondary:hover:not([disabled]) {
+  color: #18181b;
+  background: #f4f4f5;
+  border-color: #a1a1aa;
+}
+.rl-btn-secondary .rl-btn-chip {
+  background: #f4f4f5;
+  color: #18181b;
+}
+.rl-btn-secondary:hover:not([disabled]) .rl-btn-chip {
+  background: #fff;
+}
+
+/* ---------- soft: quiet gray pill ---------- */
+.rl-btn-soft {
+  color: #18181b;
+  background: #f4f4f5;
+}
+.rl-btn-soft:hover:not([disabled]) {
+  background: #e4e4e7;
+}
+.rl-btn-soft .rl-btn-chip {
+  background: #fff;
+  color: #18181b;
+  box-shadow: 0 1px 2px rgba(24, 24, 27, 0.08);
+}
+
+/* ---------- light: for dark panels ---------- */
+.rl-btn-light {
+  color: #18181b;
+  background: #fff;
+}
+.rl-btn-light:hover:not([disabled]) {
+  background: #e4e4e7;
+}
+.rl-btn-light .rl-btn-chip {
+  background: #18181b;
+  color: #fff;
+}
+
+/* ---------- pulse ring: draws the eye to the next step ---------- */
+.rl-pulse {
+  overflow: visible;
+}
+.rl-pulse > .rl-pulse-ring {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  border-radius: inherit;
+  animation: rl-pulse 1.8s ease-out 2;
+  pointer-events: none;
+}
+
+@keyframes rl-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes rl-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(24, 24, 27, 0.35);
+  }
+  100% {
+    box-shadow: 0 0 0 12px rgba(24, 24, 27, 0);
+  }
+}
+
+/* ---------- tap tiles: big icon-first choices ---------- */
+.rl-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 128px;
+  padding: 1.1rem;
+  border-radius: 24px;
+  border: 1px solid #e4e4e7;
+  background: #fff;
+  color: #18181b;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+.rl-tile:hover:not([disabled]) {
+  transform: translateY(-2px);
+  border-color: #18181b;
+  box-shadow: 0 18px 40px -22px rgba(24, 24, 27, 0.35);
+}
+.rl-tile:focus-visible {
+  outline: 2px solid #18181b;
+  outline-offset: 3px;
+}
+.rl-tile:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.rl-tile-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+  background: #f4f4f5;
+  color: #18181b;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.rl-tile:hover .rl-tile-icon {
+  background: #18181b;
+  color: #fff;
+  transform: rotate(-8deg) scale(1.05);
+}
+.rl-tile-dark {
+  background: #18181b;
+  border-color: #18181b;
+  color: #fff;
+}
+.rl-tile-dark .rl-tile-icon {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+.rl-tile-dark:hover .rl-tile-icon {
+  background: #fff;
+  color: #18181b;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rl-btn,
+  .rl-btn-chip,
+  .rl-tile,
+  .rl-tile-icon,
+  .rl-btn-secondary::before {
+    transition: none !important;
+  }
+  .rl-btn-primary::before,
+  .rl-pulse > .rl-pulse-ring {
+    animation: none !important;
+  }
+  .rl-btn:hover .rl-btn-chip,
+  .rl-tile:hover,
+  .rl-tile:hover .rl-tile-icon {
+    transform: none !important;
+  }
+}

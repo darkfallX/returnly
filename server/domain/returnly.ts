@@ -5,7 +5,7 @@ import {
   fail,
   NoWriteError,
 } from "@agent-native/core/action";
-import { getDbExec } from "@agent-native/core/db";
+import { getDbExec, withMigrationExecutionRuntime } from "@agent-native/core/db";
 import { getRequestUserEmail } from "@agent-native/core/server";
 import { and, eq, inArray, notInArray, or } from "drizzle-orm";
 
@@ -47,11 +47,31 @@ let schemaInitPromise: Promise<void> | null = null;
 let demoSeedCompleted = false;
 let demoSeedPromise: Promise<void> | null = null;
 
+export function resetReturnlySchemaCacheForTests(options?: { forceDdl?: boolean }): void {
+  schemaInitialized = false;
+  schemaInitPromise = null;
+  forceDdlOnNextEnsure = Boolean(options?.forceDdl);
+}
+
+let forceDdlOnNextEnsure = false;
+
 export async function ensureReturnlySchema(): Promise<void> {
   if (schemaInitialized) return;
   if (schemaInitPromise) return schemaInitPromise;
-  schemaInitPromise = (async () => {
+  schemaInitPromise = withMigrationExecutionRuntime(async () => {
     const exec = getDbExec();
+    const skipProbe = forceDdlOnNextEnsure;
+    forceDdlOnNextEnsure = false;
+    if (!skipProbe) {
+      try {
+        // raw-sql-ok: fast probe to skip 24 DDL round-trips when tables already exist
+        await exec.execute("SELECT 1 FROM pending_approvals LIMIT 1");
+        schemaInitialized = true;
+        return;
+      } catch {
+        // Tables not yet initialized; run idempotent DDL bootstrap below
+      }
+    }
     const statements = `${RETURNLY_INITIAL_DDL}\n${RETURNLY_UNKNOWN_FACTS_DDL}\n${RETURNLY_V3_UPGRADE_DDL}`
       .split(";")
       .map((s) => s.trim())
@@ -61,7 +81,10 @@ export async function ensureReturnlySchema(): Promise<void> {
       await exec.execute(stmt);
     }
     schemaInitialized = true;
-  })();
+  }).catch((err) => {
+    schemaInitPromise = null;
+    throw err;
+  });
   return schemaInitPromise;
 }
 

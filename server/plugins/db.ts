@@ -281,7 +281,7 @@ CREATE TABLE IF NOT EXISTS pending_approvals (
 CREATE INDEX IF NOT EXISTS idx_pending_approvals_claim ON pending_approvals(claim_id);
 `;
 
-export default runMigrations(
+export const migrateReturnlyDb = runMigrations(
   [
     {
       version: 1,
@@ -291,5 +291,7 @@ export default runMigrations(
     { version: 2, name: "nullable_unknown_purchase_age", sql: RETURNLY_UNKNOWN_FACTS_DDL },
     { version: 3, name: "private_disclosure_and_pending_approvals", sql: RETURNLY_V3_UPGRADE_DDL },
   ],
-  { table: "returnly_migrations" },
+  { table: "returnly_migrations", runInServerlessRequest: true },
 );
+
+export default migrateReturnlyDb;

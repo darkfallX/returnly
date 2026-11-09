@@ -38,6 +38,8 @@ import {
   DEMO_IDS,
   DEMO_MERCHANT_EMAIL,
   DEMO_OUTSIDER_EMAIL,
+  ensureReturnlySchema,
+  resetReturnlySchemaCacheForTests,
   resolveCallerEmail,
 } from "./returnly.ts";
 
@@ -741,5 +743,27 @@ describe("Returnly Domain, Security & Golden-Path Workflow", { timeout: 90_000 }
     expect(sources.has("buyer_ui")).toBe(true);
     expect(sources.has("merchant_agent")).toBe(true);
     expect(sources.has("merchant_ui")).toBe(true);
+
+    // 14. Verify schema bootstrap and actions succeed under Vercel production serverless guard
+    const prevVercel = process.env.VERCEL;
+    const prevRegion = process.env.VERCEL_REGION;
+    try {
+      process.env.VERCEL = "1";
+      process.env.VERCEL_REGION = "iad1";
+      resetReturnlySchemaCacheForTests({ forceDdl: true });
+      await ensureReturnlySchema();
+      resetReturnlySchemaCacheForTests();
+      await ensureReturnlySchema();
+      const vercelCtx = await getViewerContextDomain({
+        userEmail: DEMO_BUYER_EMAIL,
+        caller: "http",
+      });
+      expect(vercelCtx.email).toBe(DEMO_BUYER_EMAIL);
+    } finally {
+      if (prevVercel === undefined) delete process.env.VERCEL;
+      else process.env.VERCEL = prevVercel;
+      if (prevRegion === undefined) delete process.env.VERCEL_REGION;
+      else process.env.VERCEL_REGION = prevRegion;
+    }
   });
 });
